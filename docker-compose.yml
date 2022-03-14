@@ -25,6 +25,6 @@ services:
         - MYSQL_DATABASE=petclinic
       volumes:
         - "./conf.d:/etc/mysql/conf.d:ro"
-        - mysql-data:/var/lib/mysql
+        - "./mysql-data:/var/lib/mysql"
 volumes:
-  mysql-data:      
+  mysql-data:
