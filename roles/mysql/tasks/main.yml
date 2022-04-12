@@ -1,0 +1,29 @@
+- name: Login docker
+  docker_login:
+    registry_url: 'https://index.docker.io/v1/'
+    username: endih
+    password: '{{docker_password}}'
+    state: present
+- name: Run database side
+  docker_compose:
+    project_name: petclinic
+    pull: true
+    recreate: always
+    definition:
+      version: '3.7'
+      services:
+        mysql:
+          image: mysql
+          restart: always
+          network_mode: bridge
+          ports:
+            - '3306:3306'
+          environment:
+            - MYSQL_ROOT_PASSWORD=
+            - MYSQL_ALLOW_EMPTY_PASSWORD=true
+            - MYSQL_USER=petclinic
+            - MYSQL_PASSWORD=petclinic
+            - MYSQL_DATABASE=petclinic
+          volumes:
+            - '/local/conf.d:/etc/mysql/conf.d:ro'
+            - '/local/mysql-data:/var/lib/mysql'
