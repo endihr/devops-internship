@@ -1,9 +1,9 @@
 - name: Login docker
   docker_login:
-    registry_url: 'https://index.docker.io/v1/'
-    username: endih
-    password: '{{docker_password}}'
-    state: present
+    registry_url: "{{ lookup('env','CI_REGISTRY') }}"
+    username: "{{ lookup('env','CI_REGISTRY_USER') }}"
+    password: "{{ lookup('env','CI_REGISTRY_PASSWORD') }}"
+    state: "present"
 - name: Run client side
   docker_compose:
     project_name: petclinic

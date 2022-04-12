@@ -1,9 +1,9 @@
 - name: Login docker
   docker_login:
-    registry_url: 'https://index.docker.io/v1/'
-    username: endih
-    password: '{{docker_password}}'
-    state: present
+    registry_url: "{{ lookup('env','CI_REGISTRY') }}"
+    username: "{{ lookup('env','CI_REGISTRY_USER') }}"
+    password: "{{ lookup('env','CI_REGISTRY_PASSWORD') }}"
+    state: "present"
 - name: Run database side
   docker_compose:
     project_name: petclinic
@@ -19,11 +19,11 @@
           ports:
             - '3306:3306'
           environment:
-            - MYSQL_ROOT_PASSWORD=
-            - MYSQL_ALLOW_EMPTY_PASSWORD=true
-            - MYSQL_USER=petclinic
-            - MYSQL_PASSWORD=petclinic
-            - MYSQL_DATABASE=petclinic
+            - MYSQL_ROOT_PASSWORD={{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}
+            - MYSQL_ALLOW_EMPTY_PASSWORD={{ lookup('env', 'MYSQL_ALLOW_EMPTY_PASSWORD') }}
+            - MYSQL_USER={{ lookup('env', 'MYSQL_USER') }}
+            - MYSQL_PASSWORD={{ lookup('env', 'MYSQL_PASSWORD') }}
+            - MYSQL_DATABASE={{ lookup('env', 'MYSQL_DATABASE') }}
           volumes:
             - '/local/conf.d:/etc/mysql/conf.d:ro'
             - '/local/mysql-data:/var/lib/mysql'
