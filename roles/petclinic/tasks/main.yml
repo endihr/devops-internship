@@ -1,0 +1,27 @@
+- name: Login docker
+  docker_login:
+    registry_url: "{{ lookup('env','CI_REGISTRY') }}"
+    username: "{{ lookup('env','CI_REGISTRY_USER') }}"
+    password: "{{ lookup('env','CI_REGISTRY_PASSWORD') }}"
+    state: "present"
+- name: Run client side
+  docker_compose:
+    project_name: petclinic
+    pull: true
+    recreate: always
+    definition:
+      version: '3.7'
+      services:
+        petclinic:
+          image: 'endih/endihub:latest'
+          build: .
+          container_name: my-petclinic
+          restart: always
+          network_mode: bridge
+          ports:
+            - '8090:8080'
+          environment:
+            - SPRING_PROFILES_ACTIVE=mysql
+            - SPRING_DATASOURCE_URL=jdbc:mysql://ec2-3-71-45-189.eu-central-1.compute.amazonaws.com/petclinic
+          volumes:
+            - '/local/:/app'

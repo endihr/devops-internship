@@ -1,0 +1,5 @@
+[web-server]
+18.185.249.105 ansible_user=ec2-user
+
+[database-server]
+3.71.45.189    ansible_user=ec2-user
